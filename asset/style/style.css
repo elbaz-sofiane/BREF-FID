@@ -134,7 +134,7 @@ nav {
 /* Hero Section */
 .hero {
     position: relative;
-    background: #1a1a1a url('/asset/media/hero-bg.jpg') center center;
+    background: #1a1a1a url('https://i.ibb.co/jkkNhmJk/hero-bg.jpg') center center;
     background-size: cover;
     background-attachment: fixed;
     min-height: 100vh;
