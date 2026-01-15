@@ -11,6 +11,7 @@ html {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Charm', cursive;
     line-height: 1.6;
     color: #1a1a1a;
     overflow-x: hidden;
@@ -202,7 +203,7 @@ nav {
     text-decoration: none;
     border-radius: 50px;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     transition: all 0.3s ease;
     animation: fadeInUp 1s ease 0.6s both;
     box-shadow: 0 5px 20px rgba(255, 255, 255, 0.2);
@@ -226,6 +227,55 @@ nav {
 
 .btn-white:hover {
     background: #f0f0f0;
+}
+
+/* Social Links in Hero */
+.social-links {
+    position: absolute;
+    bottom: 3rem;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 2rem;
+    z-index: 2;
+    animation: fadeInUp 1s ease 0.9s both;
+    text-decoration: none;
+}
+
+.social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    color: white;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    text-decoration: none;
+}
+
+.social-links a:hover {
+    background: white;
+    color: #000000;
+    border-color: white;
+    transform: translateY(-5px);
+    text-decoration: none;
+}
+
+.social-links svg {
+    width: 35px;
+    height: 35px;
+    text-decoration: none;
+}
+
+img.planity-logo {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+    text-decoration: none;
+    color: white
 }
 
 .cta-button-container {
@@ -553,7 +603,7 @@ footer {
     background: #000000;
     color: white;
     text-align: center;
-    padding: 3rem 2rem;
+    padding: 1rem 2rem;
     border-top: 1px solid #333333;
 }
 
@@ -564,6 +614,7 @@ footer p {
 .footer-credits {
     color: #999999;
     font-size: 0.9rem;
+    text-decoration: none;
 }
 
 /* Animations */
@@ -662,6 +713,21 @@ footer p {
     .container {
         padding: 0 1.5rem;
     }
+
+    .social-links {
+        bottom: 2rem;
+        gap: 1.5rem;
+    }
+
+    .social-links a {
+        width: 45px;
+        height: 45px;
+    }
+
+    .social-links svg {
+        width: 20px;
+        height: 20px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -744,6 +810,26 @@ footer p {
     
     .hero {
         background-attachment: scroll;
+    }
+
+    .social-links {
+        bottom: 1.5rem;
+        gap: 1rem;
+    }
+
+    .social-links a {
+        width: 70px;
+        height: 70px;
+    }
+
+    .social-links svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    img.planity-logo {
+        width: 18px;
+        height: 18px;
     }
 }
 

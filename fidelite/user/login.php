@@ -143,7 +143,6 @@
 
         <ul class="nav-menu">
             <li><a href="../../index.html#accueil">Accueil</a></li>
-            <li><a href="../index.php">Fidélité</a></li>
         </ul>
     </nav>
 </header>
