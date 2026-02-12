@@ -1,51 +1,39 @@
-<?php 
+<?php
+/**
+ * Page de connexion admin
+*/
 
-// Connexion à la base de données
+session_start();
 $bd = new mysqli("localhost", "root", "", "injectionD");
 
+if (isset($_POST['login'])) {
+    $mail= $_POST['email'];
 
-
-if (isset($_POST['go'])) {
-
-$mail = $_POST['mail'];
-$prenom = $_POST['prenom'];
-$nom = $_POST['nom'];
-$phone = $_POST['phone'];
-
-
-    $register = "INSERT INTO `user` (mail, nom, prenom, tel) VALUES ('$mail', '$nom', '$prenom', '$phone')"; //inser le nvx"
-    $verif = "SELECT * FROM `user` WHERE mail='$mail'";
+    $verif = "SELECT * FROM `admin` WHERE mail='$mail'";
     $resultats = $bd->query($verif);
-    if ($resultats && $resultats->num_rows == 0) { //si l'utilisateur n'existe pas, alors: 
-        
-        if ($bd->query($register) === TRUE) { //si l'insertion est réussie
-            header("Location: login.php");
+
+        if ($resultats && $resultats->num_rows <> 0) { //si l'utilisateur existe alors: 
+        $_SESSION['mail'] = $mail;
+        header("Location: panel-admin.php");
             exit;
-        } else {
-            echo "Erreur lors de l'inscription: " . $bd->error;
-        }
     } else {
-        echo "l'utulisateur existe déjà";
+        echo "l'utulisateur existe pas";
     }
+ 
 
 }
 
-
 ?>
-
-
-
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription - Bref Barbershop</title>
+    <title>Connexion Client - Bref Barbershop</title>
     <link rel="stylesheet" href="../../asset/style/style.css">
 
     <style>
-        .register-container {
+        .login-container {
             min-height: 100vh;
             background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
             display: flex;
@@ -55,27 +43,27 @@ $phone = $_POST['phone'];
             padding-top: 100px;
         }
 
-        .register-box {
+        .login-box {
             background: white;
             border-radius: 20px;
             padding: 3rem;
-            max-width: 500px;
+            max-width: 450px;
             width: 100%;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
-        .register-header {
+        .login-header {
             text-align: center;
             margin-bottom: 2rem;
         }
 
-        .register-header h1 {
+        .login-header h1 {
             font-size: 2rem;
             color: #000;
             margin-bottom: 0.5rem;
         }
 
-        .register-header p {
+        .login-header p {
             color: #666;
         }
 
@@ -104,10 +92,22 @@ $phone = $_POST['phone'];
             border-color: #000;
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .checkbox-group input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            color: #666;
+            cursor: pointer;
         }
 
         .submit-btn {
@@ -128,40 +128,20 @@ $phone = $_POST['phone'];
             transform: translateY(-2px);
         }
 
-        .login-link {
+        .register-link {
             text-align: center;
             margin-top: 1.5rem;
             color: #666;
         }
 
-        .login-link a {
+        .register-link a {
             color: #000;
             font-weight: 600;
             text-decoration: none;
         }
 
-                .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .checkbox-group input {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .checkbox-group label {
-            color: #666;
-            cursor: pointer;
-        }
-
-        @media (max-width: 480px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
+        .register-link a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -183,55 +163,38 @@ $phone = $_POST['phone'];
 
         <ul class="nav-menu">
             <li><a href="../../index.html#accueil">Accueil</a></li>
-            <li><a href="../index.php">Fidélité</a></li>
         </ul>
     </nav>
 </header>
 
 <br>
 
-<div class="register-container">
-    <div class="register-box">
+<div class="login-container">
+    <div class="login-box">
 
-        <div class="register-header">
-            <h1>✨ Créer un compte</h1>
-            <p>Rejoignez notre programme de fidélité</p>
+        <div class="login-header">
+            <h1>👤 Connexion Admin</h1>
+            <p>Entrez votre email pour vous connecter en tant qu'administrateur</p>
         </div>
 
         <form method="POST">
             <div class="form-group">
-                <label>Email *</label>
-                <input type="email" placeholder="exemple@email.com" name="mail" required>
+                <label>Adresse email</label>
+                <input name="email" type="email" placeholder="votre@email.com" required>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Prénom *</label>
-                    <input type="text" placeholder="Votre prénom" name="prenom" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Nom *</label>
-                    <input type="text" placeholder="Votre nom" name="nom" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Téléphone (optionnel)</label>
-                <input type="tel" placeholder="06 12 34 56 78" name="phone">
-            </div>
+<!-- Se souvenir (a faire plutard ou pas..) 
 
             <div class="checkbox-group">
-                <input type="checkbox" id="cgu" required >
-                <label for="cgu"><a href="">J'accepte les conditions générales d'utilisation</a></label>
+                <input type="checkbox" id="remember">
+                <label for="remember">Se souvenir de moi (30 jours)</label>
             </div>
+-->
 
-            <button type="submit" class="submit-btn" name="go">Créer mon compte</button>
+            <button type="submit" class="submit-btn" name="login">
+                Se connecter
+            </button>
         </form>
-
-        <div class="login-link">
-            Déjà inscrit ? <a href="login.php">Se connecter</a>
-        </div>
 
     </div>
 </div>
@@ -247,4 +210,3 @@ $phone = $_POST['phone'];
 
 </body>
 </html>
-

@@ -1,193 +1,234 @@
-<?php
-/**
- * Page de connexion client
- */
+    <?php
+    /**
+     * Page de connexion client
+    */
 
-?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion Client - Bref Barbershop</title>
-    <link rel="stylesheet" href="../../asset/style/style.css">
+session_start();
 
-    <style>
-        .login-container {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            padding-top: 100px;
+if (!isset($_SESSION['mail']) && isset($_COOKIE['remember_mail'])) {
+    $_SESSION['mail'] = $_COOKIE['remember_mail'];
+    header("Location: panel.php");
+    exit;
+}
+
+    $bd = new mysqli("localhost", "root", "", "injectionD");
+
+    if (isset($_POST['login'])) {
+        $mail= $_POST['email'];
+
+        $verif = "SELECT * FROM `user` WHERE mail='$mail'";
+        $resultats = $bd->query($verif);
+
+            if ($resultats && $resultats->num_rows <> 0) { //si l'utilisateur existe alors: 
+            $_SESSION['mail'] = $mail;
+            if (isset($_POST['remember'])) { // Si cocher "Se souvenir de moi"
+        setcookie(  //cree un cookie
+            "remember_mail", //blaz 
+            $mail,  //valeur
+            time() + (30 * 24 * 60 * 60), // 30 jours 
+            "/", // chemin (racine du site)
+            "", // domaine dcp lovalhost
+            false, // ici c pour le secutité https la ya pas vu que local host
+            true // Httponly pour les attaque xss
+        );
+    }
+            header("Location: panel.php"); 
+                exit;
+        } else {
+            echo "l'utulisateur existe pas";
         }
+    
 
-        .login-box {
-            background: white;
-            border-radius: 20px;
-            padding: 3rem;
-            max-width: 450px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
+    }
 
-        .login-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+    ?>
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Connexion Client - Bref Barbershop</title>
+        <link rel="stylesheet" href="../../asset/style/style.css">
 
-        .login-header h1 {
-            font-size: 2rem;
-            color: #000;
-            margin-bottom: 0.5rem;
-        }
+        <style>
+            .login-container {
+                min-height: 100vh;
+                background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+                padding-top: 100px;
+            }
 
-        .login-header p {
-            color: #666;
-        }
+            .login-box {
+                background: white;
+                border-radius: 20px;
+                padding: 3rem;
+                max-width: 450px;
+                width: 100%;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+            .login-header {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #000;
-            font-weight: 500;
-        }
+            .login-header h1 {
+                font-size: 2rem;
+                color: #000;
+                margin-bottom: 0.5rem;
+            }
 
-        .form-group input {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: 0.3s;
-        }
+            .login-header p {
+                color: #666;
+            }
 
-        .form-group input:focus {
-            outline: none;
-            border-color: #000;
-        }
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
 
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                color: #000;
+                font-weight: 500;
+            }
 
-        .checkbox-group input {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
+            .form-group input {
+                width: 100%;
+                padding: 1rem;
+                border: 2px solid #e0e0e0;
+                border-radius: 10px;
+                font-size: 1rem;
+                transition: 0.3s;
+            }
 
-        .checkbox-group label {
-            color: #666;
-            cursor: pointer;
-        }
+            .form-group input:focus {
+                outline: none;
+                border-color: #000;
+            }
 
-        .submit-btn {
-            width: 100%;
-            padding: 1rem;
-            background: #000;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+            .checkbox-group {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-bottom: 1.5rem;
+            }
 
-        .submit-btn:hover {
-            background: #333;
-            transform: translateY(-2px);
-        }
+            .checkbox-group input {
+                width: 18px;
+                height: 18px;
+                cursor: pointer;
+            }
 
-        .register-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #666;
-        }
+            .checkbox-group label {
+                color: #666;
+                cursor: pointer;
+            }
 
-        .register-link a {
-            color: #000;
-            font-weight: 600;
-            text-decoration: none;
-        }
+            .submit-btn {
+                width: 100%;
+                padding: 1rem;
+                background: #000;
+                color: white;
+                border: none;
+                border-radius: 10px;
+                font-size: 1.1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: 0.3s;
+            }
 
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
+            .submit-btn:hover {
+                background: #333;
+                transform: translateY(-2px);
+            }
 
-<body>
+            .register-link {
+                text-align: center;
+                margin-top: 1.5rem;
+                color: #666;
+            }
 
-<header>
-    <nav>
-        <div class="logo-container">
-            <img src="../../asset/media/logo.png" alt="Logo Bref Barbershop" class="logo-img">
-            <span class="logo-text">Bref Barbershop</span>
-        </div>
+            .register-link a {
+                color: #000;
+                font-weight: 600;
+                text-decoration: none;
+            }
 
-        <button class="menu-toggle" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+            .register-link a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
 
-        <ul class="nav-menu">
-            <li><a href="../../index.html#accueil">Accueil</a></li>
-        </ul>
-    </nav>
-</header>
+    <body>
 
-<br>
-
-<div class="login-container">
-    <div class="login-box">
-
-        <div class="login-header">
-            <h1>👤 Connexion Client</h1>
-            <p>Entrez votre email pour recevoir un lien de connexion</p>
-        </div>
-
-        <form>
-            <div class="form-group">
-                <label>Adresse email</label>
-                <input type="email" placeholder="votre@email.com" required>
+    <header>
+        <nav>
+            <div class="logo-container">
+                <img src="../../asset/media/logo.png" alt="Logo Bref Barbershop" class="logo-img">
+                <span class="logo-text">Bref Barbershop</span>
             </div>
 
-            <div class="checkbox-group">
-                <input type="checkbox" id="remember">
-                <label for="remember">Se souvenir de moi (30 jours)</label>
-            </div>
-
-            <button type="submit" class="submit-btn">
-                Envoyer le lien de connexion
+            <button class="menu-toggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
-        </form>
 
-        <div class="register-link">
-            Première visite ? <a href="register.php">Créer un compte</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html#accueil">Accueil</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <br>
+
+    <div class="login-container">
+        <div class="login-box">
+
+            <div class="login-header">
+                <h1>👤 Connexion Client</h1>
+                <p>Entrez votre email pour recevoir un lien de connexion</p>
+            </div>
+
+            <form method="POST">
+                <div class="form-group">
+                    <label>Adresse email</label>
+                    <input name="email" type="email" placeholder="votre@email.com" required>
+                </div>
+
+
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Se souvenir de moi (30 jours)</label>
+                </div>
+
+
+                <button type="submit" class="submit-btn" name="login">
+                    Se connecter
+                </button>
+            </form>
+
+            <div class="register-link">
+                Première visite ? <a href="register.php">Créer un compte</a>
+            </div>
+
         </div>
-
     </div>
-</div>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2024 Bref Barbershop. Tous droits réservés.</p>
-        <p class="footer-credits">Sofiane - WebDesign</p>
-    </div>
-</footer>
+        <footer>
+            <div class="container">
+                <p>&copy; 2024 Bref Barbershop. Tous droits réservés.</p>
+                <a class="footer-credits" href="../../Mention-Legale.html">Mentions Legales |</a> <a class="footer-credits" href="https://github.com/elbaz-sofiane">Sofiane - WebDesign</a>
+            </div>
+        </footer>
 
-<script src="../../asset/script/script.js"></script>
+    <script src="../../asset/script/script.js"></script>
 
-</body>
-</html>
+    </body>
+    </html>

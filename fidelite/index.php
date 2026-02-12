@@ -1,23 +1,12 @@
 <?php
-/**
- * Page d'accueil du système de fidélité
- * Bref Barbershop
- */
-
 session_start();
-require_once __DIR__ . '/../config/db.php';
-
-// Si déjà connecté, rediriger
-if (isset($_SESSION['client_id'])) {
-    header('Location: user/panel.php');
+if (isset($_SESSION['mail'])) {
+    header("Location: user/panel.php");
     exit;
 }
 
-if (isset($_SESSION['commercant_id'])) {
-    header('Location: admin/dashboard.php');
-    exit;
-}
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -221,24 +210,24 @@ if (isset($_SESSION['commercant_id'])) {
                     <div class="choice-icon">🏪</div>
                     <h2>Espace Commerçant</h2>
                     <p>Scannez les QR codes clients et gérez le programme de fidélité</p>
-                    <a href="admin/security_page.php" class="choice-btn">Accéder</a>
+                    <a href="admin/login-admin.php" class="choice-btn">Accéder</a>
                 </div>
             </div>
 
             <div class="features">
                 <div class="feature">
                     <div class="feature-icon">⭐</div>
-                    <h3>1 Point par visite</h3>
+                    <h3>10 Point par visite</h3>
                     <p>Chaque passage compte</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">🎁</div>
-                    <h3>5 Points = Produit</h3>
+                    <h3>50 Points = Produit</h3>
                     <p>Un produit offert</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">✂️</div>
-                    <h3>10 Points = Coupe</h3>
+                    <h3>100 Points = Coupe</h3>
                     <p>Une coupe gratuite</p>
                 </div>
                 <div class="feature">
@@ -253,7 +242,7 @@ if (isset($_SESSION['commercant_id'])) {
     <footer>
         <div class="container">
             <p>&copy; 2024 Bref Barbershop. Tous droits réservés.</p>
-            <p class="footer-credits">Sofiane - WebDesign</p>
+            <a class="footer-credits" href="../Mention-Legale.html">Mentions Legales |</a> <a class="footer-credits" href="https://github.com/elbaz-sofiane">Sofiane - WebDesign</a>
         </div>
     </footer>
 
